@@ -2,21 +2,31 @@ package iterator
 
 type Tree interface {
 	Insert(value int)
+	GetRoot() *TreeNode
+	GetIterator() Iterator
 }
 
-type treeNode struct {
-	Left  *treeNode
-	Right *treeNode
+type TreeNode struct {
+	left  *TreeNode
+	right *TreeNode
 	Value int
 }
 
 type tree struct {
-	root *treeNode
+	root *TreeNode
+}
+
+func (t *tree) GetIterator() Iterator {
+	return NewIterator(t)
+}
+
+func (t *tree) GetRoot() *TreeNode {
+	return t.root
 }
 
 func (t *tree) Insert(value int) {
 	if t.root == nil {
-		t.root = &treeNode{
+		t.root = &TreeNode{
 			Value: value,
 		}
 		return
@@ -24,22 +34,22 @@ func (t *tree) Insert(value int) {
 	t.root.insert(value)
 }
 
-func (tn *treeNode) insert(value int) {
-	if tn.Value < value {
-		if tn.Left == nil {
-			tn.Left = &treeNode{
+func (tn *TreeNode) insert(value int) {
+	if value < tn.Value {
+		if tn.left == nil {
+			tn.left = &TreeNode{
 				Value: value,
 			}
 		} else {
-			tn.Left.insert(value)
+			tn.left.insert(value)
 		}
 	} else {
-		if tn.Right == nil {
-			tn.Right = &treeNode{
+		if tn.right == nil {
+			tn.right = &TreeNode{
 				Value: value,
 			}
 		} else {
-			tn.Right.insert(value)
+			tn.right.insert(value)
 		}
 	}
 }
